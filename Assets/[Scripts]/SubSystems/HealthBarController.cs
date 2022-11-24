@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[System.Serializable]
 public class HealthBarController : MonoBehaviour
 {
-    [Header("Health Properties")]
+    [Header("Health Properties")] 
     public int value;
 
-    [Header("Display Properties")]
+    [Header("Display Properties")] 
     public Slider healthBar;
 
-    // Start is called before the first frame update
     void Start()
     {
         healthBar = GetComponentInChildren<Slider>();
         ResetHealth();
     }
 
-    void ResetHealth()
+    public void ResetHealth()
     {
         healthBar.value = 100;
         value = (int)healthBar.value;
@@ -27,7 +27,7 @@ public class HealthBarController : MonoBehaviour
     public void TakeDamage(int damage)
     {
         healthBar.value -= damage;
-        if(healthBar.value < 0)
+        if (healthBar.value < 0)
         {
             healthBar.value = 0;
         }
@@ -43,4 +43,5 @@ public class HealthBarController : MonoBehaviour
         }
         value = (int)healthBar.value;
     }
+
 }

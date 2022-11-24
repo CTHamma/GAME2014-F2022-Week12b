@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[System.Serializable]
 public class LifeCounterController : MonoBehaviour
 {
-    [Header("Life Properties")]
+    [Header("Life Properties")] 
     public int value;
 
     private Image lifeImage;
@@ -26,9 +27,19 @@ public class LifeCounterController : MonoBehaviour
     public void LoseLife()
     {
         value -= 1;
-        if(value < 0)
+        if (value < 0)
         {
             value = 0;
+        }
+        lifeImage.sprite = Resources.Load<Sprite>($"Sprites/Life{value}");
+    }
+
+    public void GainLife()
+    {
+        value += 1;
+        if (value > 3)
+        {
+            value = 3;
         }
         lifeImage.sprite = Resources.Load<Sprite>($"Sprites/Life{value}");
     }

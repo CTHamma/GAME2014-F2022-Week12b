@@ -11,8 +11,8 @@ public struct Target
     public bool y;
 }
 
-[ExecuteInEditMode]
 
+[ExecuteInEditMode]
 public class Follow : MonoBehaviour
 {
     public Target target;

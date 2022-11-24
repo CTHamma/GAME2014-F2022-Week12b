@@ -14,12 +14,4 @@ public class GameController : MonoBehaviour
         onScreenControls.SetActive(Application.isMobilePlatform);
     }
 
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.K))
-        {
-            FindObjectOfType<HealthBarController>().TakeDamage(20);
-        }
-    }
-
 }

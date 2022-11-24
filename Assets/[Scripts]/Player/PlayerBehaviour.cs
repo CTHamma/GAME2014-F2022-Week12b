@@ -19,18 +19,45 @@ public class PlayerBehaviour : MonoBehaviour
     public Animator animator;
     public PlayerAnimationState playerAnimationState;
 
+    [Header("Health System")] 
+    public HealthBarController health;
+    public LifeCounterController life;
+    public DeathPlaneController deathPlane;
+
     [Header("Controls")] 
     public Joystick leftStick;
     [Range(0.1f, 1.0f)]
     public float verticalThreshold;
 
     private Rigidbody2D rigidbody2D;
+    private SoundManager soundManager;
 
     void Start()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        health = FindObjectOfType<PlayerHealth>().GetComponent<HealthBarController>();
+        life = FindObjectOfType<LifeCounterController>();
+        deathPlane = FindObjectOfType<DeathPlaneController>();
+        soundManager = FindObjectOfType<SoundManager>();
         leftStick = (Application.isMobilePlatform) ? GameObject.Find("LeftStick").GetComponent<Joystick>() : null;
+    }
+
+    void Update()
+    {
+        if (health.value <= 0)
+        {
+            life.LoseLife();
+
+            if (life.value > 0)
+            {
+                health.ResetHealth();
+                deathPlane.ReSpawn(gameObject);
+                soundManager.PlaySoundFX(Sound.DEATH, Channel.PLAYER_DEATH_FX);
+            }
+        }
+
+        // TODO: if live < 0 -> Load the "End" Scene
     }
 
     // Update is called once per frame
@@ -75,6 +102,7 @@ public class PlayerBehaviour : MonoBehaviour
         if ((isGrounded) && (y > verticalThreshold))
         {
             rigidbody2D.AddForce(Vector2.up * verticalForce, ForceMode2D.Impulse);
+            soundManager.PlaySoundFX(Sound.JUMP, Channel.PLAYER_SOUND_FX);
         }
     }
 
@@ -104,5 +132,15 @@ public class PlayerBehaviour : MonoBehaviour
     {
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(groundPoint.position, groundRadius);
+    }
+
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        if(other.gameObject.CompareTag("Enemy"))
+        {
+            health.TakeDamage(20);
+            
+            soundManager.PlaySoundFX(Sound.HURT, Channel.PLAYER_HURT_FX);
+        }
     }
 }
