@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerBehaviour : MonoBehaviour
 {
@@ -57,7 +58,10 @@ public class PlayerBehaviour : MonoBehaviour
             }
         }
 
-        // TODO: if live < 0 -> Load the "End" Scene
+        if(life.value <= 0)
+        {
+            SceneManager.LoadScene("End");
+        }
     }
 
     // Update is called once per frame
